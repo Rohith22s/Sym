@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSE Arena | INFINITE TECHFEST' 26</title>
+  <meta name="description" content="CSE Department events at INFINITE TECHFEST' 26">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <canvas id="webgl-bg"></canvas>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+
+  <header class="hud-header">
+    <a href="#top" class="brand glass">
+      <div class="brand-icon">◈</div>
+      <div>
+        <strong>R P SARATHY</strong>
+        <span>INSTITUTE OF TECHNOLOGY</span>
+      </div>
+    </a>
+
+    <nav class="main-nav glass">
+      <a href="#top">HOME</a>
+      <a href="#events">EVENTS</a>
+      <a href="#coordinators">COORDINATORS</a>
+    </nav>
+
+    <div class="hud-status glass">
+      <span class="status-dot"></span>
+      <span>SYSTEM ONLINE</span>
+    </div>
+  </header>
+
+  <div class="dept-switcher glass">
+    <a class="active" href="#">01 // CSE</a>
+    <a href="#">02 // AI & DS</a>
+    <a href="#">03 // IT</a>
+    <a href="#">04 // ECE</a>
+    <a href="#">05 // CYBER</a>
+    <a href="#">06 // EEE</a>
+    <a href="#">07 // MECH</a>
+    <a href="#">08 // S & H</a>
+  </div>
+
+  <main id="top">
+    <section class="hero section-grid">
+      <div class="hero-content">
+        <a class="back-link" href="#top">← RETURN TO MAIN PORTAL</a>
+        <div class="eyebrow"><span></span> DEPARTMENT ARENA 01 // CSE</div>
+
+        <h1>COMPUTER SCIENCE <em>&amp;</em><br><span>ENGINEERING</span></h1>
+
+        <p class="hero-description">
+          Unleash algorithmic precision, cutting-edge software architecture,
+          innovative mobile applications and high-speed coding challenges.
+        </p>
+
+        <div class="stats">
+          <div><b>05</b><small>CHAMPIONSHIP EVENTS</small></div>
+          <div><b>₹150</b><small>REGISTRATION FEE</small></div>
+          <div><b>∞</b><small>CASH PRIZES + CERTIFICATES</small></div>
+        </div>
+
+        <button class="cyber-btn" onclick="openRegisterModal('CSE Department')">
+          <span>⚡ REGISTER FOR CSE</span><i>→</i>
+        </button>
+      </div>
+
+      <div class="hero-terminal glass">
+        <div class="terminal-top">
+          <span>CSE_CORE // LIVE FEED</span>
+          <span class="terminal-live">● LIVE</span>
+        </div>
+        <div class="terminal-body">
+          <div class="cube-wrap">
+            <div class="cube">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span>
+            </div>
+          </div>
+          <div class="terminal-lines">
+            <p><b>&gt;</b> initializing_department.exe</p>
+            <p><b>&gt;</b> loading competition_tracks...</p>
+            <p><b>&gt;</b> neural_link: <span>CONNECTED</span></p>
+            <p><b>&gt;</b> coding_engine: <span>READY</span></p>
+            <p><b>&gt;</b> participants: <span id="counter">040+</span></p>
+            <p><b>&gt;</b> status: <span class="blink">AWAITING PILOTS_</span></p>
+          </div>
+        </div>
+        <div class="terminal-footer">
+          <span>DRAG / SCROLL TO EXPLORE</span>
+          <span>SYS.CSE.01</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="events" class="content-section">
+      <div class="section-heading">
+        <span>// COMPETITION TRACKS</span>
+        <h2>OFFICIAL <strong>EVENTS</strong></h2>
+        <p>Five high-intensity competition modules engineered by the Department of Computer Science & Engineering.</p>
+      </div>
+
+      <div class="events-grid">
+        <article class="event-card">
+          <div class="event-top"><b>01</b><span>RESEARCH // PRESENTATION</span></div>
+          <h3>PAPER PRESENTATION</h3>
+          <p>Present research breakthroughs in Cloud Computing, Quantum Computing, Distributed Systems, Web3 or Neural Interfaces.</p>
+          <div class="meta"><span>◷ 1–3 MEMBERS</span><span>▣ 10 OCT 2026</span></div>
+          <div class="actions">
+            <button class="outline-btn" onclick="openRulesModal('Paper Presentation','10:45 AM - 01:00 PM','CSE Seminar Hall 1',['Max presentation time: 8 mins + 2 mins Q&A','Submit PPT & abstract by Oct 10, 2026','Bring presentation on USB drive as fallback','Original work only; plagiarism strictly penalized'])">VIEW RULES</button>
+            <button class="cyber-btn small" onclick="openRegisterModal('Paper Presentation')">REGISTER</button>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-top"><b>02</b><span>PRODUCT // INTERFACE</span></div>
+          <h3>UI UX DESIGN <i>(VIBE CODING)</i></h3>
+          <p>Turn a real-time prompt into an immersive interface using Figma, Penpot or pure front-end code.</p>
+          <div class="meta"><span>◷ 90 MINUTES</span><span>◇ FIGMA / HTML-CSS</span></div>
+          <div class="actions">
+            <button class="outline-btn" onclick="openRulesModal('UI UX Design (Vibe Coding)','11:00 AM - 12:30 PM','Computer Lab 3',['Theme disclosed at start of round','Evaluation on hierarchy, accessibility and animations','Figma, Penpot or front-end code permitted','Individual or Duo participation'])">VIEW RULES</button>
+            <button class="cyber-btn small" onclick="openRegisterModal('UI UX Design (Vibe Coding)')">REGISTER</button>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-top"><b>03</b><span>APP // DEVELOPMENT</span></div>
+          <h3>MOBILE APPLICATION DEVELOPMENT</h3>
+          <p>Demonstrate deployed mobile solutions across Flutter, React Native, Kotlin or Swift with live code review.</p>
+          <div class="meta"><span>◷ LIVE DEMO</span><span>▣ ANDROID / IOS</span></div>
+          <div class="actions">
+            <button class="outline-btn" onclick="openRulesModal('Mobile Application Development','11:00 AM - 01:00 PM','Advanced Software Lab',['Bring personal testing device or emulator','Present live APK / TestFlight / Expo build','Code walkthrough by judges','Team of 1 to 2 members'])">VIEW RULES</button>
+            <button class="cyber-btn small" onclick="openRegisterModal('Mobile Application Development')">REGISTER</button>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-top"><b>04</b><span>COMPETITIVE // PROGRAMMING</span></div>
+          <h3>SPEED CODING</h3>
+          <p>Race against time to debug, write and execute error-free code across escalating test scenarios.</p>
+          <div class="meta"><span>◷ 2 ROUNDS</span><span>&lt;/&gt; C / C++ / JAVA / PYTHON</span></div>
+          <div class="actions">
+            <button class="outline-btn" onclick="openRulesModal('Speed Coding','11:15 AM - 12:45 PM','Programming Lab 1',['Individual participation only','No internet lookup during round','Scored on speed, correctness and memory complexity','Tie-breaker based on first full submission timestamp'])">VIEW RULES</button>
+            <button class="cyber-btn small" onclick="openRegisterModal('Speed Coding')">REGISTER</button>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-top"><b>05</b><span>PROBLEM // SOLVING</span></div>
+          <h3>ALGORITHM CHALLENGE</h3>
+          <p>Tackle Dynamic Programming, Graph Theory, Greedy approaches and Tree traversal brainteasers.</p>
+          <div class="meta"><span>◷ DSA + LOGIC</span><span>◎ MODERATE → ADVANCED</span></div>
+          <div class="actions">
+            <button class="outline-btn" onclick="openRulesModal('Algorithm Challenge','02:00 PM - 03:30 PM','Computer Center 2',['Pen & paper blueprint followed by implementation','Team of 1 or 2 members','Judged on algorithmic optimality and Big-O','Top 5 teams qualify for rapid-fire finals'])">VIEW RULES</button>
+            <button class="cyber-btn small" onclick="openRegisterModal('Algorithm Challenge')">REGISTER</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="coordinators" class="content-section coordinators">
+      <div class="section-heading">
+        <span>// DEPARTMENT CONTACTS</span>
+        <h2>CSE <strong>COMMAND CENTRE</strong></h2>
+        <p>Contact the department coordinators for submissions, guidelines and venue assistance.</p>
+      </div>
+
+      <div class="coord-grid">
+        <div class="coord-card glass">
+          <span>STAFF CO-ORDINATOR</span>
+          <h3>Mr. M. Ramesh</h3>
+          <p>Assistant Professor / Dept of CSE</p>
+          <div><a href="tel:9500535551">☎ 95005 35551</a><a href="https://wa.me/919500535551" target="_blank">◉ WHATSAPP</a></div>
+        </div>
+        <div class="coord-card glass">
+          <span>STUDENT CO-ORDINATOR</span>
+          <h3>Mr. S. Venkatajalapathi</h3>
+          <p>Final Year (IV / CSE)</p>
+          <div><a href="tel:6385575445">☎ 63855 75445</a><a href="https://wa.me/916385575445" target="_blank">◉ WHATSAPP</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="bottom-hud glass">
+    <span>INFINITE TECHFEST' 26</span>
+    <span>DATA // 17.10.2026</span>
+    <span>NEURAL LINK: <b>ONLINE</b></span>
+  </div>
+
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal glass">
+      <button class="close" onclick="closeModals()">×</button>
+      <span class="modal-tag">// OFFICIAL REGISTRATION</span>
+      <h2>ACCESS <strong>GRANTED</strong></h2>
+      <p id="registerText">Registration for CSE events.</p>
+      <div class="modal-info">REGISTRATION FEE: <strong>₹150/- ONLY</strong></div>
+      <a class="cyber-btn full" href="https://rpsitsymposium.netlify.app" target="_blank">OPEN REGISTRATION FORM →</a>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="rulesModal">
+    <div class="modal glass">
+      <button class="close" onclick="closeModals()">×</button>
+      <span class="modal-tag">// EVENT PROTOCOL</span>
+      <h2 id="rulesTitle">EVENT DETAILS</h2>
+      <div class="rule-meta"><span id="rulesTime"></span><span id="rulesVenue"></span></div>
+      <ul id="rulesBody"></ul>
+      <button class="cyber-btn full" onclick="closeModals()">ACKNOWLEDGE PROTOCOL</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
