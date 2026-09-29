@@ -1,0 +1,72 @@
+:root {
+            --neon-cyan: #00f0ff;
+            --neon-amber: #ffaa00;
+            --neon-purple: #bd00ff;
+        }
+        body {
+            margin: 0;
+            background-color: #03030c;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+        }
+        .font-orbitron { font-family: 'Orbitron', monospace, sans-serif; }
+        .font-mono-tech { font-family: 'Share Tech Mono', monospace; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #03030c; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
+
+        /* HUD & Glassmorphism */
+        .glass-panel {
+            background: rgba(8, 14, 30, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 240, 255, 0.22);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 240, 255, 0.05);
+        }
+        .glass-panel-amber {
+            background: rgba(25, 15, 5, 0.6);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 170, 0, 0.05);
+        }
+
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 30px rgba(0, 240, 255, 0.4), 0 0 60px rgba(0, 240, 255, 0.2);
+        }
+        .neon-sun-glow {
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.8), 0 0 35px rgba(255, 100, 0, 0.5), 0 0 70px rgba(255, 50, 0, 0.3);
+        }
+        .neon-purple-glow {
+            text-shadow: 0 0 12px rgba(189, 0, 255, 0.8), 0 0 35px rgba(189, 0, 255, 0.4);
+        }
+
+        /* Scanline CRT overlay */
+        .scanlines {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Space Canvas Container */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Floating interactive indicators */
+        .reticle-corner {
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            border-color: #00f0ff;
+        }

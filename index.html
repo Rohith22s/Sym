@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INFINITE TECHFEST' 26</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body class="relative bg-[#020208] text-slate-100 overflow-x-hidden">
+
+
+    <!-- =========================================================
+         3D THREE.JS CANVAS
+    ========================================================== -->
+
+    <canvas id="webgl-canvas"></canvas>
+
+
+    <!-- =========================================================
+         SCANLINE OVERLAY
+    ========================================================== -->
+
+    <div class="fixed inset-0 scanlines z-10 pointer-events-none"></div>
+
+
+
+    <!-- =========================================================
+         TOP HUD
+    ========================================================== -->
+
+    <header class="fixed top-0 left-0 right-0 z-30 pointer-events-none p-4 md:p-6 flex justify-between items-start">
+
+
+        <!-- =====================================================
+             LEFT - COUNTDOWN TIMER
+        ====================================================== -->
+
+        <div class="pointer-events-auto glass-panel px-5 py-2.5 rounded-xl text-center">
+
+            <span class="text-[10px] font-mono-tech tracking-widest text-slate-400">
+                TECHFEST' 26 // COUNTDOWN
+            </span>
+
+            <div id="countdown"
+                 class="font-orbitron text-sm md:text-base text-cyan-300 font-bold tracking-wider mt-0.5">
+
+                00D : 00H : 00M : 00S
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             CENTER - RP SARATHY INSTITUTE
+        ====================================================== -->
+
+        <div class="absolute left-1/2 -translate-x-1/2 pointer-events-auto flex items-center gap-3 glass-panel px-5 py-2.5 rounded-xl">
+
+
+            <!-- Status Light -->
+
+            <div class="relative w-3.5 h-3.5">
+
+                <span class="absolute inset-0 rounded-full bg-cyan-400 animate-ping opacity-75"></span>
+
+                <span class="relative block w-3.5 h-3.5 rounded-full bg-cyan-500 shadow-[0_0_10px_#00f0ff]"></span>
+
+            </div>
+
+
+
+            <!-- Institute Name -->
+
+            <div class="text-center">
+
+                <div class="text-[10px] tracking-widest font-mono-tech text-cyan-400 uppercase">
+
+                    RP SARATHY
+
+                </div>
+
+                <div class="text-xs md:text-sm font-orbitron font-bold tracking-wider text-slate-200">
+
+                    RP SARATHY INSTITUTE OF TECHNOLOGY
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             RIGHT - CONTROLS
+        ====================================================== -->
+
+        <div class="pointer-events-auto flex items-center gap-2">
+
+
+            <!-- AUDIO BUTTON -->
+
+            <button id="audio-toggle"
+                    class="glass-panel hover:border-cyan-400 text-cyan-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-mono-tech uppercase tracking-wider transition-all flex items-center gap-2">
+
+
+                <svg id="audio-icon"
+                     class="w-4 h-4 fill-current"
+                     viewBox="0 0 24 24">
+
+                    <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2.5 9.77l-4.5-4H3v6h4l4.5 4v-6zm5.5 3.24c1.19-.69 2-1.97 2-3.24s-.81-2.55-2-3.24v6.48z"/>
+
+                </svg>
+
+
+                <span id="audio-label">
+
+                    AUDIO: OFF
+
+                </span>
+
+            </button>
+
+
+
+            <!-- CAMERA / LOOK MODE -->
+
+            <button id="camera-free-toggle"
+                    class="glass-panel hover:border-cyan-400 text-slate-300 hover:text-cyan-300 px-3.5 py-2 rounded-xl text-xs font-mono-tech uppercase tracking-wider transition-all hidden sm:flex items-center gap-1.5">
+
+
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+
+
+                <span>
+
+                    LOOK MODE: GYRO
+
+                </span>
+
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         BOTTOM HUD
+    ========================================================== -->
+
+    <footer class="fixed bottom-0 left-0 right-0 z-30 pointer-events-none p-4 md:p-6 flex justify-between items-end text-xs font-mono-tech">
+
+
+        <!-- =====================================================
+             ATMOSPHERIC SHIELD
+        ====================================================== -->
+
+        <div class="glass-panel px-3.5 py-2 rounded-xl text-slate-400 max-w-[200px] hidden sm:block">
+
+
+            <div class="text-[10px] text-cyan-400 font-bold mb-0.5">
+
+            DATA:17.10.2026
+
+            </div>
+
+
+           
+                
+
+            </div>
+
+
+            <div class="flex justify-between text-[9px] mt-1 text-slate-400"></div>
+
+                
+                
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             SCROLL INDICATOR
+        ====================================================== -->
+
+        <div id="scroll-prompt"
+             class="mx-auto flex flex-col items-center gap-1 text-cyan-400 animate-bounce cursor-pointer pointer-events-auto">
+
+
+            <span class="text-[10px] tracking-widest font-mono-tech uppercase">
+
+                Scroll to Pilot
+
+            </span>
+
+
+            <svg class="w-4 h-4 stroke-current fill-none stroke-2"
+                 viewBox="0 0 24 24">
+
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+
+            </svg>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             EVENT DATE
+        ====================================================== -->
+
+        <div class="glass-panel px-3.5 py-2 rounded-xl text-right text-slate-300">
+
+
+            <div class="text-[10px] text-slate-400">
+
+                Symposium Overall Co-ordinator
+
+            </div>
+
+
+            <div id="hud-clock"
+                 class="font-bold text-cyan-300">
+
+                
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
+    <main class="relative z-20 w-full">
+
+
+
+        <!-- =====================================================
+             SECTION 0 - HERO
+        ====================================================== -->
+
+        <section id="sec-0"
+                 class="min-h-screen w-full flex flex-col items-center justify-center px-6 text-center relative pointer-events-none">
+
+
+            <div class="max-w-4xl mx-auto flex flex-col items-center pointer-events-auto">
+
+
+                <!-- Event Type -->
+
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-300 text-xs font-mono-tech uppercase tracking-widest mb-6 backdrop-blur-md">
+
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+
+                    National Level Technical Symposium
+
+                </div>
+
+
+
+                <!-- Main Title -->
+
+                <h1 class="text-4xl sm:text-6xl md:text-8xl font-orbitron font-black tracking-tight text-white uppercase neon-text-glow leading-tight">
+
+                    INFINITE TECHFEST' 26
+
+                </h1>
+
+
+
+                <!-- Subtitle -->
+
+                <h2 class="text-lg sm:text-2xl font-orbitron font-medium tracking-[0.3em] text-cyan-200 mt-2 uppercase">
+
+                    Engineering The Next Frontier
+
+                </h2>
+
+
+
+                <!-- Description -->
+
+                <p class="max-w-xl text-slate-300 text-sm sm:text-base font-light mt-6 leading-relaxed">
+
+                    8 Engineering Departments • Technical & Non-Technical Challenges • Project Expos • Paper Presentations
+
+                </p>
+
+
+
+                <!-- Buttons -->
+
+                <div class="mt-8 flex flex-wrap gap-4 justify-center items-center">
+
+
+                    <button onclick="jumpToSection(1)"
+                            class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-orbitron font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,240,255,0.6)] hover:shadow-[0_0_40px_rgba(0,240,255,0.9)] hover:scale-105 transition-all">
+
+                        EXPLORE 8 DEPTS
+
+                    </button>
+
+
+
+                    <button onclick="jumpToSection(9)"
+                            class="px-7 py-3.5 rounded-xl glass-panel text-cyan-300 hover:text-white border border-cyan-500/40 font-orbitron font-semibold text-sm tracking-wider uppercase transition-all hover:border-cyan-300">
+
+                        ⚡REGISTER NOW
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 1 - CSE
+        ====================================================== -->
+
+        <section id="sec-1"
+                 class="min-h-screen w-full flex items-center justify-start px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative overflow-hidden">
+
+
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-slate-500/10 rounded-full blur-2xl"></div>
+
+
+                <div class="text-xs font-mono-tech text-slate-300 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-slate-300 animate-ping"></span>
+
+                    CSE ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-slate-200 neon-text-glow uppercase">
+
+                    COMPUTER SCIENCE ENGINEERING
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-slate-300 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Dive into cutting-edge computing, algorithmic showdowns, and high-speed web and mobile application challenges.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-slate-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-slate-200 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-slate-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-slate-200 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 2 - AI & DS
+        ====================================================== -->
+
+        <section id="sec-2"
+                 class="min-h-screen w-full flex items-center justify-end px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel-amber p-8 md:p-10 rounded-3xl pointer-events-auto relative overflow-hidden">
+
+
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow-500/10 rounded-full blur-2xl"></div>
+
+
+                <div class="text-xs font-mono-tech text-yellow-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span>
+
+                    AI & DS ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-yellow-300 uppercase">
+
+                    ARTIFICIAL INTELLIGENCE & DATA SCIENCE
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-yellow-400 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Explore intelligent systems, machine learning, data analytics and innovative AI-powered solutions.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-yellow-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-yellow-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-yellow-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-yellow-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 3 - IT
+        ====================================================== -->
+
+        <section id="sec-3"
+                 class="min-h-screen w-full flex items-center justify-start px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative">
+
+
+                <div class="text-xs font-mono-tech text-cyan-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+
+                    IT ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-white neon-text-glow uppercase">
+
+                    INFORMATION TECHNOLOGY
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-cyan-400 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Discover software development, cloud computing, web technologies, cybersecurity and modern digital solutions.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-cyan-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-cyan-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-cyan-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-cyan-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 4 - ECE
+        ====================================================== -->
+
+        <section id="sec-4"
+                 class="min-h-screen w-full flex items-center justify-end px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative">
+
+
+                <div class="text-xs font-mono-tech text-red-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-red-400"></span>
+
+                    ECE ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-red-300 uppercase">
+
+                    ELECTRONICS & COMMUNICATION ENGINEERING
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-red-500 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Experience electronics, communication systems, embedded technologies, signal processing and next-generation devices.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-red-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-red-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-red-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-red-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 5 - CS
+        ====================================================== -->
+
+        <section id="sec-5"
+                 class="min-h-screen w-full flex items-center justify-start px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative">
+
+
+                <div class="text-xs font-mono-tech text-orange-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+
+                    CS ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-orange-300 uppercase">
+
+                    COMPUTER SCIENCE ENGINEERING (CS)
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-orange-500 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Take part in programming challenges, computational thinking, software innovation and technology-driven competitions.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-orange-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-orange-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-orange-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-orange-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 6 - EEE
+        ====================================================== -->
+
+        <section id="sec-6"
+                 class="min-h-screen w-full flex items-center justify-end px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative border-indigo-500/30">
+
+
+                <div class="text-xs font-mono-tech text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+
+                    EEE ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-indigo-200 uppercase">
+
+                    ELECTRICAL & ELECTRONICS ENGINEERING
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-indigo-500 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Explore electrical systems, power electronics, automation, control systems and emerging energy technologies.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-indigo-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-indigo-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-indigo-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-indigo-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 7 - MECHANICAL
+        ====================================================== -->
+
+        <section id="sec-7"
+                 class="min-h-screen w-full flex items-center justify-start px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative">
+
+
+                <div class="text-xs font-mono-tech text-teal-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+
+                    MECH ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-teal-200 uppercase">
+
+                    MECHANICAL ENGINEERING
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-teal-500 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Discover mechanical design, robotics, manufacturing, automation and innovative engineering solutions.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-teal-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-teal-300 font-bold text-base mt-0.5">
+
+                            5 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-teal-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-teal-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 8 - SCIENCE & HUMANITIES
+        ====================================================== -->
+
+        <section id="sec-8"
+                 class="min-h-screen w-full flex items-center justify-end px-6 md:px-16 lg:px-24 pointer-events-none">
+
+
+            <div class="max-w-xl glass-panel p-8 md:p-10 rounded-3xl pointer-events-auto relative">
+
+
+                <div class="text-xs font-mono-tech text-blue-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+
+                    S&H ARENA
+
+                </div>
+
+
+                <h2 class="text-3xl sm:text-5xl font-orbitron font-extrabold text-blue-200 uppercase">
+
+                    SCIENCE & HUMANITIES
+
+                </h2>
+
+
+                <div class="w-16 h-1 bg-blue-500 my-4 rounded-full"></div>
+
+
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+
+                    Explore scientific thinking, communication, creativity, mathematics, humanities and interdisciplinary innovation.
+
+                </p>
+
+
+                <div class="grid grid-cols-2 gap-4 mt-6 font-mono-tech text-xs">
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-blue-500/20">
+
+                        <div class="text-slate-400">
+                            EVENTS
+                        </div>
+
+                        <div class="text-blue-300 font-bold text-base mt-0.5">
+
+                            4 EVENTS
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-3 bg-black/40 rounded-xl border border-blue-500/20">
+
+                        <div class="text-slate-400">
+                            EXPLORE
+                        </div>
+
+                        <div class="text-blue-300 font-bold text-base mt-0.5">
+
+                            VIEW ARENA
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SECTION 9 - WARP HORIZON
+        ====================================================== -->
+
+        <section id="sec-9"
+                 class="min-h-screen w-full flex flex-col items-center justify-center px-6 text-center pointer-events-none">
+
+
+            <div class="max-w-3xl mx-auto glass-panel p-8 sm:p-12 rounded-3xl pointer-events-auto border-cyan-400/50 relative overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.2)]">
+
+
+                <div class="text-xs font-mono-tech text-cyan-400 uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+
+                    National Level Technical Symposium
+
+                </div>
+
+
+                <h2 class="text-4xl sm:text-6xl font-orbitron font-black text-white uppercase neon-text-glow">
+
+                    INFINITE TECHFEST' 26
+
+                </h2>
+
+
+                <p class="text-slate-300 text-sm sm:text-base font-light mt-4 max-w-xl mx-auto leading-relaxed">
+
+                     8 Engineering Departments • Technical & Non-Technical Challenges • Project Expos • Paper Presentations
+
+                </p>
+
+
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+
+                    <button id="warp-btn"
+                            class="w-full sm:w-auto px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-500 text-slate-950 font-orbitron font-black text-base tracking-widest uppercase shadow-[0_0_30px_#00f0ff] hover:shadow-[0_0_60px_#00f0ff] hover:scale-105 active:scale-95 transition-all">
+
+                        ⚡REGISTER HERE
+
+                    </button>
+
+
+
+                    <button 
+                            class="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-cyan-400 text-cyan-300 font-orbitron font-bold text-xs tracking-wider uppercase transition-all">
+
+                        ROAD MAP
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script src="script.js"></script>
+
+
+</body>
+</html>
